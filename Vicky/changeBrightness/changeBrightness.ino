@@ -102,48 +102,49 @@ void loop(){
   { fadeSpeed = -fadeSpeed;  
   }  
 
-  hue        = map(sensorVal,0, 1023,0, 359);     // hue is a number between 0 and 360
+  // hue        = map(sensorVal,0, 1023,0, 359);     // hue is a number between 0 and 360
+  hue        = 500;     // hue is a number between 0 and 360
   saturation = 255;                               // saturation is a number between 0 - 255
   brightness = fadeVal;                           // value is a number between 0 - 255
 
   getRGB(hue,saturation,brightness,rgb_colors);   // converts HSB to RGB
 
 
-  analogWrite(ledPinR, rgb_colors[0]);            // red value in index 0 of rgb_colors array
-  analogWrite(ledPinG, rgb_colors[1]);            // green value in index 1 of rgb_colors array
-  analogWrite(ledPinB, rgb_colors[2]);            // blue value in index 2 of rgb_colors array
+  // analogWrite(ledPinR, rgb_colors[0]);            // red value in index 0 of rgb_colors array
+  // analogWrite(ledPinG, rgb_colors[1]);            // green value in index 1 of rgb_colors array
+  // analogWrite(ledPinB, rgb_colors[2]);            // blue value in index 2 of rgb_colors array
   // ledfading end
 
 
 
 // led part
 
-  if (peakToPeak >= 0 && peakToPeak<200)
-  {
-    /* code */
-    // Serial.println("peakToPeak");
-    color = 0x00FF00;
-    }else if(peakToPeak >= 201 && peakToPeak < 400){
-    color=0xFF0000;
-    }else if (peakToPeak >= 401 && peakToPeak < 600){
-    color=0xFFFFFF;
-    }else if (peakToPeak >= 601 && peakToPeak < 800){
-    color=0x88FF00;
-    }else if(peakToPeak >= 801 && peakToPeak < 1023){
-    color=0xFF00FF;
-    }
+  // if (peakToPeak >= 0 && peakToPeak<200)
+  // {
+  //   /* code */
+  //   // Serial.println("peakToPeak");
+  //   color = 0x00FF00;
+  //   }else if(peakToPeak >= 201 && peakToPeak < 400){
+  //   color=0xFF0000;
+  //   }else if (peakToPeak >= 401 && peakToPeak < 600){
+  //   color=0xFFFFFF;
+  //   }else if (peakToPeak >= 601 && peakToPeak < 800){
+  //   color=0x88FF00;
+  //   }else if(peakToPeak >= 801 && peakToPeak < 1023){
+  //   color=0xFF00FF;
+  //   }
 
-  addcolor(color, 100);
+  addcolor(rgb_colors[0],rgb_colors[1],rgb_colors[2], 100);
 
 
-  if(++head >= NUMPIXELS) {         // Increment head index.  Off end of strip?
-    head = 0;                       //  Yes, reset head index to start
-   // if((color >>= 8) == 0)          //  Next color (R->G->B) ... past blue now?
-    // color = 0xFF0000;             //   Yes, reset to red
-  }
-  if(++tail >= NUMPIXELS) tail = 0; // Increment, reset tail index
+  // if(++head >= NUMPIXELS) {         // Increment head index.  Off end of strip?
+  //   head = 0;                       //  Yes, reset head index to start
+  //  // if((color >>= 8) == 0)          //  Next color (R->G->B) ... past blue now?
+  //   // color = 0xFF0000;             //   Yes, reset to red
+  // }
+  // if(++tail >= NUMPIXELS) tail = 0; // Increment, reset tail index
 
-  // led part end
+  // // led part end
 
   unsigned int signalMax = 0;
   unsigned int signalMin = 1024;
@@ -216,11 +217,11 @@ void loop(){
 
 
 // updata color function 
-int addcolor(uint32_t colorInUse, int delayTime){
+int addcolor(int colorR,int colorG,int colorB, int delayTime){
   for (int i = 0; i < NUMPIXELS; ++i)
   {
   /* code */
-  strip.setPixelColor(i, colorInUse); // 'On' pixel at head
+  strip.setPixelColor(i, colorR,colorG,colorB); // 'On' pixel at head
  // strip.setPixelColor(tail, 0);     // 'Off' pixel at tail
   strip.show();                     // Refresh strip
                  
