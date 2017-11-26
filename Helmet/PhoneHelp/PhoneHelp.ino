@@ -1,4 +1,3 @@
-
 #include <Adafruit_DotStar.h>
 // Because conditional #includes don't work w/Arduino sketches...
 #include <SPI.h>         // COMMENT OUT THIS LINE FOR GEMMA OR TRINKET
@@ -48,14 +47,33 @@ void loop() {
 
 
   if (val == 0){
-   for (int i = 0; i < NUMPIXELS; ++i)
+   // for (int i = 0; i < NUMPIXELS; ++i)
+   //    {
+   //      // strip.setPixelColor(i, 255, 255, 255);
+   //      strip.setPixelColor(i, color);
+   //    }        
+   //    strip.show(); 
+   //    countNumberSound = 0;
+   //    delay(2000);
+
+
+      for (int i = 0; i < 10; ++i){
+        /* code */
+            for (int i = 0; i < NUMPIXELS; ++i)
       {
         // strip.setPixelColor(i, 255, 255, 255);
         strip.setPixelColor(i, color);
-      }        
-      strip.show(); 
-      countNumberSound = 0;
-      delay(2000);
+      }       
+        strip.show();
+        delay(400);
+        for (int i = 0; i < NUMPIXELS; ++i)
+      {
+        // strip.setPixelColor(i, 255, 255, 255);
+        strip.setPixelColor(i, black);
+      }       
+        strip.show();
+        delay(400);
+      }
   }else{
     for (int i = 0; i < NUMPIXELS; ++i)
       {
@@ -70,69 +88,5 @@ void loop() {
       
   }
 }
-//   {
-//     /* code */
-//   }
-//   if (val==0)
-//   {
-//     // begin count
-//     countNumberSound += 1;
-//     if (countNumberSound > 100)
-//     {
-//       /* code */
-//      countNumberSound = 100;
-//     }
 
-//   }else{
-//     countNumberSound -= 1;
-//     if (countNumberSound < -100)
-//     {
-//      /* code */
-//      countNumberSound = -100;
-//     }
-
-//   }
-
-
-//   if (countNumberSound > 30)
-//   {
-//    /* code */
-//    for (int i = 0; i < NUMPIXELS; ++i)
-//       {
-//         // strip.setPixelColor(i, 255, 255, 255);
-//         strip.setPixelColor(i, color);
-//       }        
-//       strip.show(); 
-//   }
-//   if (countNumberSound < -30)
-//   {
-//    /* code */
-//          for (int x = 0; x < NUMPIXELS; ++x){
-//         strip.setPixelColor(x, black);
-
-//       }
-//       strip.show(); 
-
-//   }
-
-
-// //   if (countNumber < 20) {
-// //       // countNumber = countNumber + 1;
-// //       for (int i = 0; i < NUMPIXELS; ++i)
-// //       {
-// //         // strip.setPixelColor(i, 255, 255, 255);
-// //         strip.setPixelColor(i, color);
-// //       }        
-// //       strip.show(); 
-// //       countNumber += 1;
-// //     }
-// // else {
-// //       for (int x = 0; x < NUMPIXELS; ++x){
-// //         strip.setPixelColor(x, black);
-
-// //       }
-// //       countNumberSound = 0;
-// //       strip.show(); 
-// //     }
-//   }
 
