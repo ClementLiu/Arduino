@@ -66,22 +66,24 @@ void loop()
   
 // led part
 
-if (peakToPeak >= 20 && peakToPeak<90)
+if (peakToPeak >= 0 && peakToPeak<200)
 {
   /* code */
   Serial.println("peakToPeak");
-
   color = 0x00FF00;
-  }else if(peakToPeak >= 90 && peakToPeak < 200){
+  }else if(peakToPeak >= 201 && peakToPeak < 400){
   color=0xFF0000;
-  }else if (peakToPeak >= 200 && peakToPeak < 600){
+  }else if (peakToPeak >= 401 && peakToPeak < 600){
+  color=0xFFFFFF;
+  }else if (peakToPeak >= 601 && peakToPeak < 800){
+  color=0x88FF00;
+  }else if(peakToPeak >= 801 && peakToPeak < 1023){
   color=0xFF00FF;
   }
 
 
+addcolor(color, 100);
 
-  delay(100);  
-         // Pause 20 milliseconds (~50 FPS)
 
   if(++head >= NUMPIXELS) {         // Increment head index.  Off end of strip?
     head = 0;                       //  Yes, reset head index to start
@@ -173,6 +175,8 @@ int addcolor(uint32_t colorInUse, int delayTime){
   strip.show();                     // Refresh strip
                  
   }
+    delay(delayTime);  
+         // Pause 20 milliseconds (~50 FPS)
 }
 
 
