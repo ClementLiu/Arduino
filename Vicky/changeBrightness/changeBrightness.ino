@@ -36,7 +36,8 @@ Adafruit_DotStar strip = Adafruit_DotStar(
 // (Arduino Uno = pin 11 for data, 13 for clock, other boards are different).
 //Adafruit_DotStar strip = Adafruit_DotStar(NUMPIXELS, DOTSTAR_BRG);
 
-// add HSL  to RGB 
+// add HSL to rgb 
+
 const byte dim_curve[] = {
     0,   1,   1,   2,   2,   2,   2,   2,   2,   3,   3,   3,   3,   3,   3,   3,
     3,   3,   3,   3,   3,   3,   3,   4,   4,   4,   4,   4,   4,   4,   4,   4,
@@ -55,6 +56,16 @@ const byte dim_curve[] = {
     146, 149, 151, 154, 157, 159, 162, 165, 168, 171, 174, 177, 180, 183, 186, 190,
     193, 196, 200, 203, 207, 211, 214, 218, 222, 226, 230, 234, 238, 242, 248, 255,
 };
+int sensorVal = 0; // store the value coming from the sensor
+int fadeVal   = 0; // value that changes between 0-255
+int fadeSpeed = 4; // 'speed' of fading
+
+// getRGB function stores RGB values in this array
+// use these values for the red, blue, green led. 
+int rgb_colors[3]; 
+
+int hue, saturation, brightness;
+
 
 
 void setup()
@@ -75,33 +86,54 @@ void setup()
 
 int      head  = 0, tail = -3; // Index of first 'on' and 'off' pixels
 uint32_t color = 0xFF0000;      //
+int brightness = 0;
 
 
 
 
 
-void loop()
-{
+void loop(){
   
+// led fadeing
+  fadeVal = fadeVal + fadeSpeed;         // change fadeVal by speed
+  fadeVal = constrain(fadeVal, 0, 255);  // keep fadeVal between 0 and 255
+
+  if(fadeVal==255 || fadeVal==0)         // change from up>down or down-up (negative/positive)
+  { fadeSpeed = -fadeSpeed;  
+  }  
+
+  hue        = map(sensorVal,0, 1023,0, 359);     // hue is a number between 0 and 360
+  saturation = 255;                               // saturation is a number between 0 - 255
+  brightness = fadeVal;                           // value is a number between 0 - 255
+
+  getRGB(hue,saturation,brightness,rgb_colors);   // converts HSB to RGB
+
+
+  analogWrite(ledPinR, rgb_colors[0]);            // red value in index 0 of rgb_colors array
+  analogWrite(ledPinG, rgb_colors[1]);            // green value in index 1 of rgb_colors array
+  analogWrite(ledPinB, rgb_colors[2]);            // blue value in index 2 of rgb_colors array
+  // ledfading end
+
+
+
 // led part
 
-if (peakToPeak >= 0 && peakToPeak<200)
-{
-  /* code */
-  Serial.println("peakToPeak");
-  color = 0x00FF00;
-  }else if(peakToPeak >= 201 && peakToPeak < 400){
-  color=0xFF0000;
-  }else if (peakToPeak >= 401 && peakToPeak < 600){
-  color=0xFFFFFF;
-  }else if (peakToPeak >= 601 && peakToPeak < 800){
-  color=0x88FF00;
-  }else if(peakToPeak >= 801 && peakToPeak < 1023){
-  color=0xFF00FF;
-  }
+  if (peakToPeak >= 0 && peakToPeak<200)
+  {
+    /* code */
+    // Serial.println("peakToPeak");
+    color = 0x00FF00;
+    }else if(peakToPeak >= 201 && peakToPeak < 400){
+    color=0xFF0000;
+    }else if (peakToPeak >= 401 && peakToPeak < 600){
+    color=0xFFFFFF;
+    }else if (peakToPeak >= 601 && peakToPeak < 800){
+    color=0x88FF00;
+    }else if(peakToPeak >= 801 && peakToPeak < 1023){
+    color=0xFF00FF;
+    }
 
-
-addcolor(color, 100);
+  addcolor(color, 100);
 
 
   if(++head >= NUMPIXELS) {         // Increment head index.  Off end of strip?
@@ -198,7 +230,72 @@ int addcolor(uint32_t colorInUse, int delayTime){
 }
 
 
+// change to RGB 
+void getRGB(int hue, int sat, int val, int colors[3]) { 
+  /* convert hue, saturation and brightness ( HSB/HSV ) to RGB
+     The dim_curve is used only on brightness/value and on saturation (inverted).
+     This looks the most natural.      
+  */
 
+  val = dim_curve[val];
+  sat = 255-dim_curve[255-sat];
+
+  int r;
+  int g;
+  int b;
+  int base;
+
+  if (sat == 0) { // Acromatic color (gray). Hue doesn't mind.
+    colors[0]=val;
+    colors[1]=val;
+    colors[2]=val;  
+  } else  { 
+
+    base = ((255 - sat) * val)>>8;
+
+    switch(hue/60) {
+    case 0:
+        r = val;
+        g = (((val-base)*hue)/60)+base;
+        b = base;
+    break;
+
+    case 1:
+        r = (((val-base)*(60-(hue%60)))/60)+base;
+        g = val;
+        b = base;
+    break;
+
+    case 2:
+        r = base;
+        g = val;
+        b = (((val-base)*(hue%60))/60)+base;
+    break;
+
+    case 3:
+        r = base;
+        g = (((val-base)*(60-(hue%60)))/60)+base;
+        b = val;
+    break;
+
+    case 4:
+        r = (((val-base)*(hue%60))/60)+base;
+        g = base;
+        b = val;
+    break;
+
+    case 5:
+        r = val;
+        g = base;
+        b = (((val-base)*(60-(hue%60)))/60)+base;
+    break;
+    }
+
+    colors[0]=r;
+    colors[1]=g;
+    colors[2]=b; 
+  }   
+}
 
 
 
