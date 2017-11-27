@@ -176,6 +176,17 @@ void fadingColor(int hueFade){
   Serial.println(rgb_colors[1]);
 
 }
+
+void fadeLED(){
+  for (int i = 0; i < NUMPIXELS; ++i)
+  {
+    /* code */
+    uint32_t colorLED; 
+    colorLED = strip.GetPixelColor(i);
+    
+  }
+  
+}
 // change to RGB 
 void getRGB(int hue, int sat, int val, int colors[3]) { 
   /* convert hue, saturation and brightness ( HSB/HSV ) to RGB
