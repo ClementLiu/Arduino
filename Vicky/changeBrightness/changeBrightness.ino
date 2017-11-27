@@ -58,7 +58,7 @@ const byte dim_curve[] = {
 };
 int sensorVal = 0; // store the value coming from the sensor
 int fadeVal   = 0; // value that changes between 0-255
-int fadeSpeed = 4; // 'speed' of fading
+int fadeSpeed = 5; // 'speed' of fading
 
 // getRGB function stores RGB values in this array
 // use these values for the red, blue, green led. 
@@ -86,7 +86,6 @@ void setup()
 
 int      head  = 0, tail = -3; // Index of first 'on' and 'off' pixels
 uint32_t color = 0xFF0000;      //
-int brightness = 0;
 
 
 
@@ -95,47 +94,7 @@ int brightness = 0;
 void loop(){
   
 // led fadeing
-  fadeVal = fadeVal + fadeSpeed;         // change fadeVal by speed
-  fadeVal = constrain(fadeVal, 0, 255);  // keep fadeVal between 0 and 255
-
-  if(fadeVal==255 || fadeVal==0)         // change from up>down or down-up (negative/positive)
-  { fadeSpeed = -fadeSpeed;  
-  }  
-
-  // hue        = map(sensorVal,0, 1023,0, 359);     // hue is a number between 0 and 360
-  hue        = 500;     // hue is a number between 0 and 360
-  saturation = 255;                               // saturation is a number between 0 - 255
-  brightness = fadeVal;                           // value is a number between 0 - 255
-
-  getRGB(hue,saturation,brightness,rgb_colors);   // converts HSB to RGB
-
-
-  // analogWrite(ledPinR, rgb_colors[0]);            // red value in index 0 of rgb_colors array
-  // analogWrite(ledPinG, rgb_colors[1]);            // green value in index 1 of rgb_colors array
-  // analogWrite(ledPinB, rgb_colors[2]);            // blue value in index 2 of rgb_colors array
-  // ledfading end
-
-
-
-// led part
-
-  // if (peakToPeak >= 0 && peakToPeak<200)
-  // {
-  //   /* code */
-  //   // Serial.println("peakToPeak");
-  //   color = 0x00FF00;
-  //   }else if(peakToPeak >= 201 && peakToPeak < 400){
-  //   color=0xFF0000;
-  //   }else if (peakToPeak >= 401 && peakToPeak < 600){
-  //   color=0xFFFFFF;
-  //   }else if (peakToPeak >= 601 && peakToPeak < 800){
-  //   color=0x88FF00;
-  //   }else if(peakToPeak >= 801 && peakToPeak < 1023){
-  //   color=0xFF00FF;
-  //   }
-
-  addcolor(rgb_colors[0],rgb_colors[1],rgb_colors[2], 100);
-
+  
 
   // if(++head >= NUMPIXELS) {         // Increment head index.  Off end of strip?
   //   head = 0;                       //  Yes, reset head index to start
@@ -166,6 +125,7 @@ void loop(){
         signalMin = micsensorVal;  // save just the min levels
       }
     }
+    fadingColor();
   }
   peakToPeak = signalMax - signalMin;  // max - min = peak-peak amplitude
   //double volts = (peakToPeak * 3.3) / 1024;  // convert to volts
@@ -185,7 +145,7 @@ void loop(){
   //   // Turn left
   //   digitalWrite(3, LOW); // motor off
   //     delay(100);
-  //   Serial.println(peakToPeak);
+     
   // }
 
 }
@@ -227,10 +187,54 @@ int addcolor(int colorR,int colorG,int colorB, int delayTime){
                  
   }
     delay(delayTime);  
+//    Serial.println("work");
          // Pause 20 milliseconds (~50 FPS)
 }
 
+void fadingColor(){
+  fadeVal = fadeVal + fadeSpeed;         // change fadeVal by speed
+  fadeVal = constrain(fadeVal, 0, 255);  // keep fadeVal between 0 and 255
 
+  if(fadeVal==255 || fadeVal==0)         // change from up>down or down-up (negative/positive)
+  { fadeSpeed = -fadeSpeed;  
+  }  
+
+  // hue        = map(sensorVal,0, 1023,0, 359);     // hue is a number between 0 and 360
+  hue        = 200;     // hue is a number between 0 and 360
+  saturation = 255;                               // saturation is a number between 0 - 255
+  brightness = fadeVal;                           // value is a number between 0 - 255
+
+  getRGB(hue,saturation,brightness,rgb_colors);   // converts HSB to RGB
+
+
+  // analogWrite(ledPinR, rgb_colors[0]);            // red value in index 0 of rgb_colors array
+  // analogWrite(ledPinG, rgb_colors[1]);            // green value in index 1 of rgb_colors array
+  // analogWrite(ledPinB, rgb_colors[2]);            // blue value in index 2 of rgb_colors array
+  // ledfading end
+
+
+
+// led part
+
+  // if (peakToPeak >= 0 && peakToPeak<200)
+  // {
+  //   /* code */
+  //   // Serial.println("peakToPeak");
+  //   color = 0x00FF00;
+  //   }else if(peakToPeak >= 201 && peakToPeak < 400){
+  //   color=0xFF0000;
+  //   }else if (peakToPeak >= 401 && peakToPeak < 600){
+  //   color=0xFFFFFF;
+  //   }else if (peakToPeak >= 601 && peakToPeak < 800){
+  //   color=0x88FF00;
+  //   }else if(peakToPeak >= 801 && peakToPeak < 1023){
+  //   color=0xFF00FF;
+  //   }
+
+  addcolor(rgb_colors[0],rgb_colors[1],rgb_colors[2], 20);
+Serial.println(rgb_colors[1]);
+
+}
 // change to RGB 
 void getRGB(int hue, int sat, int val, int colors[3]) { 
   /* convert hue, saturation and brightness ( HSB/HSV ) to RGB
