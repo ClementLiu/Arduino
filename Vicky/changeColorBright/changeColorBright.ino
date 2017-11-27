@@ -113,7 +113,24 @@ void loop(){
         signalMin = micsensorVal;  // save just the min levels
       }
     }
-    fadingColor();
+
+    if (peakToPeak >= 0 && peakToPeak<200)
+  {
+  /* code */
+  Serial.println("peakToPeak");
+  fadingColor(100);
+  }else if(peakToPeak >= 201 && peakToPeak < 400){
+  // color=0xFF0000;
+  fadingColor(200);
+  }else if (peakToPeak >= 401 && peakToPeak < 600){
+  fadingColor(50);
+  }else if (peakToPeak >= 601 && peakToPeak < 800){
+  fadingColor(10);
+  }else if(peakToPeak >= 801 && peakToPeak < 1023){
+  fadingColor(300);
+  }
+
+    
   }
   peakToPeak = signalMax - signalMin;  // max - min = peak-peak amplitude
   //double volts = (peakToPeak * 3.3) / 1024;  // convert to volts
@@ -138,7 +155,7 @@ int addcolor(int colorR,int colorG,int colorB, int delayTime){
          // Pause 20 milliseconds (~50 FPS)
 }
 
-void fadingColor(){
+void fadingColor(int hueFade){
   fadeVal = fadeVal + fadeSpeed;         // change fadeVal by speed
   fadeVal = constrain(fadeVal, 0, 255);  // keep fadeVal between 0 and 255
 
@@ -147,31 +164,15 @@ void fadingColor(){
   }  
 
   // hue        = map(sensorVal,0, 1023,0, 359);     // hue is a number between 0 and 360
-  hue        = 200;     // hue is a number between 0 and 360
+  hue        = hueFade;     // hue is a number between 0 and 360
   saturation = 255;                               // saturation is a number between 0 - 255
   brightness = fadeVal;                           // value is a number between 0 - 255
 
   getRGB(hue,saturation,brightness,rgb_colors);   // converts HSB to RGB
 
 
-// led part
 
-  // if (peakToPeak >= 0 && peakToPeak<200)
-  // {
-  //   /* code */
-  //   // Serial.println("peakToPeak");
-  //   color = 0x00FF00;
-  //   }else if(peakToPeak >= 201 && peakToPeak < 400){
-  //   color=0xFF0000;
-  //   }else if (peakToPeak >= 401 && peakToPeak < 600){
-  //   color=0xFFFFFF;
-  //   }else if (peakToPeak >= 601 && peakToPeak < 800){
-  //   color=0x88FF00;
-  //   }else if(peakToPeak >= 801 && peakToPeak < 1023){
-  //   color=0xFF00FF;
-  //   }
-
-  addcolor(rgb_colors[0],rgb_colors[1],rgb_colors[2], 20);
+  addcolor(rgb_colors[0],rgb_colors[1],rgb_colors[2], 0);
   Serial.println(rgb_colors[1]);
 
 }
