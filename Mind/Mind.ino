@@ -4,6 +4,8 @@
 // This is example code provided by Pantech Prolabs. and is provided
 // license free.
 ////////////////////////////////////////////////////////////////////////
+#include <Servo.h>      
+
 
 #define LED 13
 #define BAUDRATE 57600
@@ -38,9 +40,17 @@ boolean bigPacket = false;
 //////////////////////////
 // Microprocessor Setup //
 //////////////////////////
+
+
+// server/
+Servo servoLeft;       
 void setup()
 
 {
+
+servoLeft.attach(13);                      // Attach left signal to pin 13
+  // servoLeft.writeMicroseconds(1500); 
+
   pinMode(GREENLED1, OUTPUT);
   pinMode(GREENLED2, OUTPUT);
   pinMode(GREENLED3, OUTPUT);
@@ -156,36 +166,47 @@ void loop()
           {
           case 0:
             Serial.println("Not Move");
+            servoLeft.write(0);  
             break;
           case 1:
             Serial.println("Not Move");
+            servoLeft.write(0);  
             break;
           case 2:
             Serial.println("Not Move");
+            servoLeft.write(0);  
             break;
           case 3:
             Serial.println("Move");
+            servoLeft.write(180);
             break;
           case 4:
             Serial.println("Move");
+            servoLeft.write(180);
             break;
           case 5:
             Serial.println(" Move");
+            servoLeft.write(180);
             break;
           case 6:
             Serial.println(" Move");
+            servoLeft.write(180);
             break;
           case 7:
             Serial.println(" Move");
+            servoLeft.write(180);
             break;
           case 8:
             Serial.println(" Move");
+            servoLeft.write(180);
             break;
           case 9:
             Serial.println(" Move");
+            servoLeft.write(180);
             break;
           case 10:
             Serial.println(" Move");
+            servoLeft.write(180);
             break;
           }
         }
