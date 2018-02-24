@@ -36,8 +36,8 @@ void setup() {
 
   mySerial.begin(9600);  // Initialize SoftwareSerial
   //Serial1.begin(19200); // Use this instead if using hardware serial
-  printer.begin(1);        // Init printer (same regardless of serial type)
-
+  printer.begin();        // Init printer (same regardless of serial type)
+  printer.setTimes(1,1);
   printer.underlineOn();
   printer.println(F("CHARACTER SET EXAMPLE\n"));
   printer.underlineOff();
