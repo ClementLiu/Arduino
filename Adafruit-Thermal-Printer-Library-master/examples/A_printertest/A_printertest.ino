@@ -11,7 +11,7 @@
   to match your printer (hold feed button on powerup for test page).
   ------------------------------------------------------------------------*/
 
-#include "Adafruit_Thermal.h"
+#include "Adafruit_Thermal1.h"
 #include "adalogo.h"
 #include "adaqrcode.h"
 
@@ -41,7 +41,7 @@ void setup() {
   pinMode(7, OUTPUT); digitalWrite(7, LOW);
 
   // NOTE: SOME PRINTERS NEED 9600 BAUD instead of 19200, check test page.
-  mySerial.begin(19200);  // Initialize SoftwareSerial
+  mySerial.begin(9800);  // Initialize SoftwareSerial
   //Serial1.begin(19200); // Use this instead if using hardware serial
   printer.begin();        // Init printer (same regardless of serial type)
 
