@@ -34,7 +34,7 @@ void setup() {
   // wired up the same way (w/3-pin header into pins 5/6/7):
   pinMode(7, OUTPUT); digitalWrite(7, LOW);
 
-  mySerial.begin(19200);  // Initialize SoftwareSerial
+  mySerial.begin(9600);  // Initialize SoftwareSerial
   //Serial1.begin(19200); // Use this instead if using hardware serial
   printer.begin();        // Init printer (same regardless of serial type)
 
@@ -50,7 +50,7 @@ void setup() {
 
   // Also note that strings passed to printBarcode() are always normal
   // RAM-resident strings; PROGMEM strings (e.g. F("123")) are NOT used.
-
+  printer.setBarcodeHeight(100);
   // UPC-A: 12 digits
   printer.print(F("UPC-A:"));
   printer.printBarcode("123456789012", UPC_A);

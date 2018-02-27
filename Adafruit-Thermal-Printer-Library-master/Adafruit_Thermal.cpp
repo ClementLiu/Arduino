@@ -184,8 +184,8 @@ void Adafruit_Thermal::begin(uint8_t heatTime) {
   // is n(D7-D5)*250us.
   // (Unsure of the default value for either -- not documented)
 
-#define printDensity   15 // 100% (? can go higher, text is darker but fuzzy)
-#define printBreakTime  6  // 500 uS
+#define printDensity   20 // 100% (? can go higher, text is darker but fuzzy)
+#define printBreakTime  1  // 500 uS
 
   writeBytes(ASCII_DC2, '#', (printBreakTime << 5) | printDensity);
 

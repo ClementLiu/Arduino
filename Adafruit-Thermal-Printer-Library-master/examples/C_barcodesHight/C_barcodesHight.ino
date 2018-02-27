@@ -1,10 +1,10 @@
 /*------------------------------------------------------------------------
   Example sketch for Adafruit Thermal Printer library for Arduino.
-  Demonstrates some of the available alternate characters.
+  Demonstrates the available gamut of barcodes.
   See 'A_printertest' sketch for a more generalized printing example.
 
-  THESE FEATURES ARE NOT AVAILABLE ON ALL PRINTERS.  Older firmware
-  does not support the alternate characters used here.
+  BARCODE AVAILABILITY VARIES WITH FIRMWARE.  Not all barcodes may be
+  displayed, this is normal.  Sketch may need changes for older firmware.
   ------------------------------------------------------------------------*/
 
 #include "Adafruit_Thermal.h"
@@ -37,47 +37,32 @@ void setup() {
   mySerial.begin(9600);  // Initialize SoftwareSerial
   //Serial1.begin(19200); // Use this instead if using hardware serial
   printer.begin();        // Init printer (same regardless of serial type)
-  printer.setTimes(2,10);
-  printer.timeoutSet(1);
-  printer.timeoutWait();
-  printer.underlineOn();
-  printer.println(F("CHARACTER SET EXAMPLE\n"));
-  printer.underlineOff();
 
-  printer.println(F("DEFAULT CHARSET & CODE PAGE:"));
-  dump();
+  printer.justify('C');
 
-  printer.println(F("\nNORWAY CHARSET w/"));
-  printer.println(F("KATAKANA CODEPAGE:"));
-  // Charset selection alters a few chars in ASCII 0x23-0x7E range.
-  printer.setCharset(CHARSET_NORWAY);
-  // Code page selects alt symbols for 'upper' ASCII 0x80-0xFF.
-  // There's a TON of these, best to check datasheet!
-  printer.setCodePage(CODEPAGE_KATAKANA);
-  dump();
+  // There seems to be some conflict between datasheet descriptions
+  // of barcode formats and reality.  Try Wikipedia and/or:
+  // http://www.barcodeisland.com/symbolgy.phtml
 
-  printer.feed(2);
-  printer.setDefault(); // Restore printer to defaults
+  // Also note that strings passed to printBarcode() are always normal
+  // RAM-resident strings; PROGMEM strings (e.g. F("123")) are NOT used.
+  printer.setBarcodeHeight(10);
+
+  // CODE 93: compressed version of Code 39?
+  printer.print(F("CODE 93:"));
+  for (int i=0; i <= 20; i++){
+      printer.printBarcode("GGGYYYYGGG", CODE93);
+      delay(10);
 }
 
-// Print charset map to printer, similar to test page but
-// without the baud rate, etc.
-void dump() {
-  uint8_t major, minor, c;
+  
+//  printer.printBarcode("ADAFRUIT", CODE93);
 
-  printer.println(F("        01234567  89ABCDEF"));
-  for(major=0; major<16; major++) {
-    printer.print(F("     "));
-    printer.print(major, HEX);
-    printer.print(F("- "));
-    for(minor=0; minor<16; minor++) {
-      c = (major << 4) | minor;
-      if(c < 32) c = ' '; // Skip control codes!
-      printer.write(c);
-      if(minor == 7) printer.print(F("  "));
-    }
-    printer.println();
-  }
+  // CODE 128: 2-255 characters (ASCII 0-127)
+  printer.print(F("CODE128:"));
+  printer.printBarcode("Adafruit", CODE128);
+
+  printer.setDefault(); // Restore printer to defaults
 }
 
 void loop() {
