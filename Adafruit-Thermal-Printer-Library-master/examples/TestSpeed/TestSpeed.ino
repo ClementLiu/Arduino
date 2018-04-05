@@ -1,10 +1,10 @@
 /*------------------------------------------------------------------------
   Example sketch for Adafruit Thermal Printer library for Arduino.
-  Demonstrates some of the available alternate characters.
+  Demonstrates the available gamut of barcodes.
   See 'A_printertest' sketch for a more generalized printing example.
 
-  THESE FEATURES ARE NOT AVAILABLE ON ALL PRINTERS.  Older firmware
-  does not support the alternate characters used here.
+  BARCODE AVAILABILITY VARIES WITH FIRMWARE.  Not all barcodes may be
+  displayed, this is normal.  Sketch may need changes for older firmware.
   ------------------------------------------------------------------------*/
 
 #include "Adafruit_Thermal.h"
@@ -37,45 +37,30 @@ void setup() {
   mySerial.begin(9600);  // Initialize SoftwareSerial
   //Serial1.begin(19200); // Use this instead if using hardware serial
   printer.begin();        // Init printer (same regardless of serial type)
+//  printer.setTimes(2,10);
+  printer.justify('C');
+  printer.boldOn();
+  printer.println(F("BARCODE EXAMPLES\n"));
+  printer.boldOff();
+  printer.justify('L');
 
-  printer.underlineOn();
-  printer.println(F("CHARACTER SET EXAMPLE\n"));
-  printer.underlineOff();
+  // There seems to be some conflict between datasheet descriptions
+  // of barcode formats and reality.  Try Wikipedia and/or:
+  // http://www.barcodeisland.com/symbolgy.phtml
 
-  printer.println(F("DEFAULT CHARSET & CODE PAGE:"));
-  dump();
+  // Also note that strings passed to printBarcode() are always normal
 
-  printer.println(F("\nNORWAY CHARSET w/"));
-  printer.println(F("KATAKANA CODEPAGE:"));
-  // Charset selection alters a few chars in ASCII 0x23-0x7E range.
-  printer.setCharset(CHARSET_NORWAY);
-  // Code page selects alt symbols for 'upper' ASCII 0x80-0xFF.
-  // There's a TON of these, best to check datasheet!
-  printer.setCodePage(CODEPAGE_KATAKANA);
-  dump();
+/* Commented out because I can't get this one working yet
+  printer.print(F("UPC-E:"));
+  printer.printBarcode("123456", UPC_E);
+*/
+  // EAN-8: 8 digits (same as JAN-8)
+  printer.print(F("EAN-8:"));
+  printer.printBarcode("12345678", EAN8);
+
 
   printer.feed(2);
   printer.setDefault(); // Restore printer to defaults
-}
-
-// Print charset map to printer, similar to test page but
-// without the baud rate, etc.
-void dump() {
-  uint8_t major, minor, c;
-
-  printer.println(F("        01234567  89ABCDEF"));
-  for(major=0; major<16; major++) {
-    printer.print(F("     "));
-    printer.print(major, HEX);
-    printer.print(F("- "));
-    for(minor=0; minor<16; minor++) {
-      c = (major << 4) | minor;
-      if(c < 32) c = ' '; // Skip control codes!
-      printer.write(c);
-      if(minor == 7) printer.print(F("  "));
-    }
-    printer.println();
-  }
 }
 
 void loop() {

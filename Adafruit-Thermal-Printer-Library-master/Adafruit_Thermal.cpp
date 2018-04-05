@@ -24,7 +24,7 @@
 // operation, a few rare specimens instead work at 9600.  If so, change
 // this constant.  This will NOT make printing slower!  The physical
 // print and feed mechanisms are the bottleneck, not the port speed.
-#define BAUDRATE  19200
+#define BAUDRATE  9600
 
 // ASCII codes used by some of the printer config commands:
 #define ASCII_TAB '\t' // Horizontal tab
@@ -184,8 +184,8 @@ void Adafruit_Thermal::begin(uint8_t heatTime) {
   // is n(D7-D5)*250us.
   // (Unsure of the default value for either -- not documented)
 
-#define printDensity   10 // 100% (? can go higher, text is darker but fuzzy)
-#define printBreakTime  2 // 500 uS
+#define printDensity   20 // 100% (? can go higher, text is darker but fuzzy)
+#define printBreakTime  1  // 500 uS
 
   writeBytes(ASCII_DC2, '#', (printBreakTime << 5) | printDensity);
 
