@@ -11,7 +11,7 @@
   to match your printer (hold feed button on powerup for test page).
   ------------------------------------------------------------------------*/
 
-#include "Adafruit_Thermal.h"
+#include "Adafruit_Thermal1.h"
 #include "adalogo.h"
 #include "adaqrcode.h"
 
