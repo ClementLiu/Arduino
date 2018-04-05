@@ -16,6 +16,19 @@ byte seven_seg_digits[10][7] = { {1,1,1,1,1,0,1 },  // = 0 {1,2,3,4,5,6,7}
 int startpoint =3;
 
 
+  //  ---3---
+  // -       -
+  // 7       2
+  // -       -
+  // - --6-- -
+  // -       -
+  // 5       1
+  // -       -
+  // -       -
+  //  ---4--      .0
+
+
+
 void setup() {                
   // pinMode(2, OUTPUT);   
   // pinMode(3, OUTPUT);
